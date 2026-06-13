@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>ChessMate — Analysis</title>
+<meta name="theme-color" content="#14110d" />
+<link rel="manifest" href="./manifest.json" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%99%9E%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="app.css" />
+</head>
+<body class="app">
+
+<!-- top bar -->
+<header class="appbar">
+  <a class="brand" href="./index.html"><span class="knight">♞</span> ChessMate</a>
+  <span class="appbar-tag mono" id="turnLabel">Start position</span>
+</header>
+
+<main class="app-main">
+
+  <!-- ============ HOME / IMPORT ============ -->
+  <section class="view active" id="view-home">
+    <div class="pad">
+      <h1 class="vh">Paste a game.<br/><em>Find your blunders.</em></h1>
+      <p class="vsub">Runs entirely on your device. No account, nothing sent to anyone but the engine you ask.</p>
+
+      <label class="fld-lab mono">PGN</label>
+      <textarea id="pgnInput" class="pgn-input" placeholder="[Event &quot;...&quot;]&#10;1. e4 e5 2. Nf3 ..."></textarea>
+      <div class="row">
+        <button class="btn btn-gold" id="loadBtn">Load game →</button>
+        <button class="btn btn-ghost" id="sampleBtn">Use sample</button>
+      </div>
+
+      <div class="card fetch-card">
+        <div class="fetch-head mono">Fetch from a public archive</div>
+        <div class="fetch-grid">
+          <select id="fetchSrc" class="inp">
+            <option value="chesscom">Chess.com</option>
+            <option value="lichess">Lichess</option>
+          </select>
+          <input id="fetchUser" class="inp" placeholder="username" />
+          <input id="fetchMonth" class="inp" type="month" />
+        </div>
+        <button class="btn btn-ghost full" id="fetchBtn">Fetch games</button>
+        <div class="fetch-results" id="fetchResults" style="display:none"></div>
+      </div>
+
+      <div class="card">
+        <div class="fetch-head mono">Your library · on this device</div>
+        <div id="library"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BOARD / ANALYSIS ============ -->
+  <section class="view" id="view-board">
+    <div class="board-wrap">
+      <div class="players">
+        <span class="pl" id="pBlack">Black</span>
+        <span class="ev mono"><b id="evalText">–</b></span>
+        <span class="pl" id="pWhite">White</span>
+      </div>
+      <div class="board-row">
+        <div class="evalbar"><div class="evalfill" id="evalFill" style="height:50%"></div></div>
+        <div class="board-box"><svg id="board" viewBox="0 0 800 800" role="img" aria-label="Chess board"></svg></div>
+      </div>
+
+      <button class="alt-banner" id="altBanner" style="display:none">
+        <span class="alt-ic">↪</span><span class="alt-txt">Engine preferred …</span><span class="alt-go mono">play it</span>
+      </button>
+    </div>
+
+    <!-- analyse controls -->
+    <div class="analyse-bar">
+      <div class="str-pick">
+        <button class="str" data-s="quick">Quick<span class="mono">d12</span></button>
+        <button class="str" data-s="balanced">Balanced<span class="mono">d16</span></button>
+        <button class="str" data-s="deep">Deep<span class="mono">d20</span></button>
+      </div>
+      <button class="btn btn-gold full" id="analyseBtn">Analyse game</button>
+      <div class="progress" id="progress" style="display:none">
+        <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+        <span class="mono prog-text" id="progText">Analysing…</span>
+      </div>
+    </div>
+
+    <!-- report -->
+    <div class="report" id="report" style="display:none">
+      <div class="acc-grid">
+        <div class="acc"><span class="acc-lab mono">White</span><span class="acc-num w" id="accW">–</span></div>
+        <div class="acc"><span class="acc-lab mono">Accuracy</span><span class="acc-num mid">⌁</span></div>
+        <div class="acc"><span class="acc-lab mono">Black</span><span class="acc-num b" id="accB">–</span></div>
+      </div>
+      <div class="bd-grid">
+        <div class="bd" id="bdW"></div>
+        <div class="bd-lab mono">per-badge</div>
+        <div class="bd" id="bdB"></div>
+      </div>
+    </div>
+
+    <!-- eval graph -->
+    <div class="graph-card">
+      <div class="fetch-head mono">Eval graph · drag to scrub</div>
+      <svg id="graph" viewBox="0 0 300 80" role="img" aria-label="Evaluation graph"></svg>
+    </div>
+
+    <!-- move list -->
+    <div class="movecard">
+      <div class="fetch-head mono">Moves</div>
+      <div class="movelist" id="movelist"></div>
+    </div>
+  </section>
+
+  <!-- ============ LIBRARY (full) ============ -->
+  <section class="view" id="view-library">
+    <div class="pad">
+      <h1 class="vh">Library</h1>
+      <p class="vsub">Saved on this device with full classifications. Tap to reopen, trash to forget.</p>
+      <div class="card"><div id="library2"></div></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- glass control bar (board view) -->
+<div class="ctrlbar" id="ctrlbar">
+  <button class="cbtn" id="cStart" title="Start">⏮</button>
+  <button class="cbtn" id="cPrev" title="Prev">←</button>
+  <button class="cbtn play" id="cPlay" title="Autoplay">▶</button>
+  <button class="cbtn" id="cNext" title="Next">→</button>
+  <button class="cbtn" id="cFlip" title="Flip">⇅</button>
+  <button class="cbtn" id="arrowBtn" title="Arrows">⤳ off</button>
+  <button class="cbtn" id="saveBtn" title="Save">💾</button>
+  <button class="cbtn" id="shareBtn" title="Share">↗</button>
+</div>
+
+<!-- bottom nav -->
+<nav class="bottomnav">
+  <button class="tab active" data-view="home"><span>＋</span>Import</button>
+  <button class="tab" data-view="board"><span>♟</span>Board</button>
+  <button class="tab" data-view="library"><span>▤</span>Library</button>
+</nav>
+
+<!-- share sheet -->
+<div class="sheet" id="shareSheet">
+  <div class="sheet-inner">
+    <div class="sheet-head"><b>Share</b><button id="shareClose">✕</button></div>
+    <label class="fld-lab mono">FEN · current position</label>
+    <textarea class="share-ta" id="shareFen" rows="2" readonly></textarea>
+    <button class="btn btn-ghost full copy-btn" data-target="#shareFen">Copy FEN</button>
+    <label class="fld-lab mono" style="margin-top:16px">PGN · full game + variations</label>
+    <textarea class="share-ta" id="sharePgn" rows="5" readonly></textarea>
+    <button class="btn btn-gold full copy-btn" data-target="#sharePgn">Copy PGN</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="app-main.js"></script>
+</body>
+</html>
