@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChessMate — Chess analysis, the way it should be</title>
+<meta name="description" content="Paste a PGN, tap Analyse, get a full Brilliant-to-Blunder game report powered by Stockfish 17 — on your phone, in under a minute. No accounts. No ads. No servers." />
+<meta name="theme-color" content="#14110d" />
+<meta property="og:title" content="ChessMate — a chess tool, not a chess platform" />
+<meta property="og:description" content="Stockfish 17 in your browser. Real accuracy, ten move classifications, full game report. Runs entirely on-device. Free, forever." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%99%9E%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ░░░ NAV ░░░ -->
+<nav class="nav" id="nav">
+  <a class="brand" href="#top"><span class="knight">♞</span> ChessMate</a>
+  <div class="nav-links">
+    <a href="#why">Why</a>
+    <a href="#demo">Demo</a>
+    <a href="#legend">Classifications</a>
+    <a href="#not">What it isn't</a>
+    <a class="nav-cta" href="#cta">Open the app</a>
+  </div>
+</nav>
+
+<!-- ░░░ HERO ░░░ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="hero-tag reveal in">
+        <span class="dot"></span>
+        <span class="eyebrow">On-device · Stockfish 17 · No account</span>
+      </div>
+      <h1 class="display reveal in" data-d="1">Chess analysis,<br />the way it <em>should</em> be.</h1>
+      <p class="lead sub reveal in" data-d="2">No accounts. No ads. No servers. Paste a PGN, tap <b>Analyse</b>, and get a full Brilliant-to-Blunder game report — on your phone, in under a minute.</p>
+      <div class="hero-actions reveal in" data-d="3">
+        <a class="btn btn-gold" href="#cta">♞ &nbsp;Paste a PGN</a>
+        <a class="btn btn-ghost" href="#demo">See it move →</a>
+      </div>
+      <div class="hero-meta reveal in" data-d="4">
+        <div><span class="k">17</span><span class="v">Stockfish engine</span></div>
+        <div><span class="k">10</span><span class="v">Move badges</span></div>
+        <div><span class="k">0</span><span class="v">Servers · accounts</span></div>
+        <div><span class="k">&lt;60s</span><span class="v">Full report</span></div>
+      </div>
+    </div>
+
+    <!-- decorative board -->
+    <div class="hero-board reveal in" data-d="2" aria-hidden="true">
+      <div class="hb-grid" id="hbGrid"></div>
+      <div class="hb-eval"></div>
+      <div class="hb-badge" style="left:58%;top:30%;background:var(--c-brilliant);animation-delay:.6s">!!</div>
+      <div class="hb-badge" style="left:34%;top:62%;background:var(--c-best);animation-delay:.9s">✓</div>
+      <div class="hb-badge" style="left:74%;top:74%;background:var(--c-blunder);animation-delay:1.2s">??</div>
+      <span class="hero-cap">Bxh6!! — Brilliant · only found by tactics</span>
+    </div>
+  </div>
+</header>
+
+<!-- ░░░ STRIP ░░░ -->
+<div class="strip" aria-hidden="true">
+  <div class="strip-track">
+    <span>
+      <span>Paste · <b>PGN</b></span><span>Fetch · <b>Chess.com</b></span><span>Fetch · <b>Lichess</b></span>
+      <span>Classify · <b>10 badges</b></span><span>Strict · <b>accuracy</b></span><span>Explore · <b>variations</b></span>
+      <span>Save · <b>IndexedDB</b></span><span>Install · <b>PWA</b></span><span>Private · <b>by default</b></span>
+    </span>
+    <span>
+      <span>Paste · <b>PGN</b></span><span>Fetch · <b>Chess.com</b></span><span>Fetch · <b>Lichess</b></span>
+      <span>Classify · <b>10 badges</b></span><span>Strict · <b>accuracy</b></span><span>Explore · <b>variations</b></span>
+      <span>Save · <b>IndexedDB</b></span><span>Install · <b>PWA</b></span><span>Private · <b>by default</b></span>
+    </span>
+  </div>
+</div>
+
+<!-- ░░░ WHY ░░░ -->
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Why people switch</span>
+      <h2>A chess tool,<br/>not a chess platform.</h2>
+      <p>Most chess sites want your email, your username, your rating, your attention and ten minutes of your life before they'll tell you whether <span class="mono" style="color:var(--ink)">Bxc6</span> was a blunder. ChessMate doesn't.</p>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why"><span class="ic">🔒</span><h3>Your games stay on your phone</h3><p>No sign-up, no CAPTCHA, no email verification. Your library lives in your device's local storage — it doesn't sync, doesn't get sold, doesn't get breached. Delete the app and it's gone.</p></div>
+      <div class="why"><span class="ic">🎯</span><h3>Real analysis, not a toy</h3><p>The engine Lichess trusts — Stockfish 17 — running inside your browser, with the same Brilliant-to-Blunder classification rules chess.com uses, applied by a battle-tested open-source reporter.</p></div>
+      <div class="why"><span class="ic">📱</span><h3>Built for one hand and a thumb</h3><p>A native-first layout: fixed bottom-nav, a glass-blur control bar, a drag-to-jump eval graph, tap-to-move dots, swipe navigation, autoplay, and a Replay button that just works.</p></div>
+      <div class="why"><span class="ic">⚡</span><h3>Fast enough to feel instant</h3><p>Lichess's free cloud eval is tried first — depth-30+ in well under a second. For anything else the bundled Stockfish worker takes over at the depth you choose, and cancels cleanly on any tap.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ DEMO ░░░ -->
+<section class="demo" id="demo">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Replay the engine's mind</span>
+      <h2>Watch every decision<br/>get a verdict.</h2>
+      <p>Step through a real game below. Each move gets a colour, an icon and a place on the eval curve — on the move list, on the board, and in the accuracy score. <span class="muted">(Interactive preview — real engine runs on-device.)</span></p>
+    </div>
+
+    <div class="demo-shell reveal">
+      <!-- BOARD -->
+      <div class="board-card">
+        <div class="board-top">
+          <span class="player b"><span class="pc"></span>Nepomniachtchi</span>
+          <span class="mono" id="moveLabel">Start position</span>
+          <span class="player"><span class="pc"></span>Carlsen</span>
+        </div>
+        <div class="board"><svg id="boardSvg" viewBox="0 0 800 800" role="img" aria-label="Chess board"></svg></div>
+
+        <div class="evalbar"><div class="white" id="evalWhite" style="width:50%"></div></div>
+        <div class="eval-readout">
+          <span>Eval&nbsp; <b id="evalNum">0.0</b></span>
+          <span id="evalSide">equal</span>
+        </div>
+
+        <div class="controls">
+          <button class="ctrl" id="btnStart" aria-label="First move">⏮</button>
+          <button class="ctrl" id="btnPrev" aria-label="Previous">←</button>
+          <button class="ctrl play" id="btnPlay">▶ Autoplay</button>
+          <button class="ctrl" id="btnNext" aria-label="Next">→</button>
+          <button class="ctrl" id="btnFlip" aria-label="Flip board">⇅</button>
+        </div>
+      </div>
+
+      <!-- SIDE -->
+      <div class="side">
+        <div class="acc-card">
+          <div class="acc-row">
+            <div><div class="lab">White accuracy</div></div>
+            <div class="num w">96.4</div>
+          </div>
+          <div class="acc-row">
+            <div><div class="lab">Black accuracy</div></div>
+            <div class="num bk">88.1</div>
+          </div>
+          <div class="lab" style="margin-bottom:8px">Eval graph</div>
+          <svg id="graphSvg" viewBox="0 0 300 90" style="width:100%;height:72px;cursor:crosshair" role="img" aria-label="Evaluation graph"></svg>
+        </div>
+
+        <div class="move-card">
+          <div class="mc-head">Move list · 10 classifications</div>
+          <div class="movelist" id="movelist"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ LEGEND ░░░ -->
+<section id="legend">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">The classification colours</span>
+      <h2>Ten verdicts,<br/>one honest scale.</h2>
+      <p>Every move earns exactly one badge — on the list, floating over the destination square, and as a dot on the graph. From a tactic only a search would find, to the move that cost you the game.</p>
+    </div>
+    <div class="legend-grid reveal" id="legendGrid"></div>
+  </div>
+</section>
+
+<!-- ░░░ FLOW ░░░ -->
+<section class="demo" id="flow">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">How it feels to use it</span>
+      <h2>Open. Paste. Find your blunders. Close.</h2>
+      <p>That's the whole pitch. Nothing happens to your data. Nothing is sent to anyone.</p>
+    </div>
+    <div class="flow reveal">
+      <div class="step"><span class="n">01</span><h3>Paste a PGN</h3><p>The home screen shows a tiny board with the final position and a tap-to-load button. The board flies in.</p></div>
+      <div class="step"><span class="n">02</span><h3>Tap Analyse</h3><p>A tournament-gold button starts Stockfish. A progress bar fills as evaluations stream in.</p></div>
+      <div class="step"><span class="n">03</span><h3>Read the report</h3><p>White & black percentages, a per-badge breakdown card, and an SVG curve with teal brilliants and red blunders.</p></div>
+      <div class="step"><span class="n">04</span><h3>Replay & explore</h3><p>Swipe the moves with soft sounds, tap a suggestion to branch a variation, drag the graph to scrub.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ WHAT IT'S NOT ░░░ -->
+<section class="not-sec" id="not">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">What ChessMate is not</span>
+      <h2>This matters as much<br/>as what it does.</h2>
+    </div>
+    <div class="not-list reveal">
+      <div class="not-item"><span class="x">✕</span><div><h3>Not a chess server</h3><p>Your games aren't hosted. Your account isn't on our systems. We don't have a database.</p></div></div>
+      <div class="not-item"><span class="x">✕</span><div><h3>Not a social network</h3><p>No friends list, no chat, no forum, no "see what Magnus played today" widget.</p></div></div>
+      <div class="not-item"><span class="x">✕</span><div><h3>Not a subscription product</h3><p>No Pro tier. No paywall. No feature-locked "try free for 7 days" nonsense.</p></div></div>
+      <div class="not-item"><span class="x">✕</span><div><h3>Not a content farm</h3><p>No lessons, no puzzles, no daily challenges, no notification spam.</p></div></div>
+      <div class="not-item"><span class="x">✕</span><div><h3>Not a tracking platform</h3><p>No analytics SDK. No telemetry. No fingerprinting. The only network calls are the ones you explicitly trigger.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ CTA ░░░ -->
+<section class="cta" id="cta">
+  <div class="wrap reveal">
+    <span class="eyebrow">Free, forever, no strings</span>
+    <h2 class="display">Find your<br/><em>blunders.</em></h2>
+    <p class="lead">Open it. Paste a game. Watch Stockfish 17 evaluate every move, classify every decision, and hand you a real accuracy score — with nothing sent to anyone.</p>
+    <div class="hero-actions" style="justify-content:center">
+      <a class="btn btn-gold" href="#top">♞ &nbsp;Open ChessMate</a>
+      <a class="btn btn-ghost" href="https://github.com/vkas-testacc/webpage-demo" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ FOOTER ░░░ -->
+<footer class="footer">
+  <div class="wrap">
+    <div>
+      <a class="brand" href="#top" style="font-size:1.5rem;margin-bottom:18px"><span class="knight">♞</span> ChessMate</a>
+      <p class="colofon">Crafted by VKAS with one brief: make chess analysis feel like a tool, not a product. No growth team. No engagement metrics. Just a fast, honest, private analysis experience.</p>
+      <p class="credit">Built by <b>VKAS</b> · Stockfish 17 lite, original licence · Classification engine derived from <b>WintrChess</b>, GPL-3.0</p>
+    </div>
+    <div>
+      <h4>Product</h4>
+      <a href="#why">Why ChessMate</a>
+      <a href="#demo">Interactive demo</a>
+      <a href="#legend">Classifications</a>
+      <a href="#flow">How it works</a>
+    </div>
+    <div>
+      <h4>Engine</h4>
+      <a href="#">Quick · depth 12</a>
+      <a href="#">Balanced · depth 16</a>
+      <a href="#">Deep · depth 20</a>
+      <a href="https://github.com/vkas-testacc/webpage-demo" target="_blank" rel="noopener">Source ↗</a>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
